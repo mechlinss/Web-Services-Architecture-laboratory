@@ -1,10 +1,11 @@
 package com.example.AUI_Labs;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class EmployeeRole implements Comparable<EmployeeRole>{
+public class EmployeeRole implements Serializable, Comparable<EmployeeRole>{
     private final String name;
     private final List<Employee> employees = new ArrayList();
 

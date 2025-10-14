@@ -1,8 +1,9 @@
 package com.example.AUI_Labs;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Employee implements Comparable<Employee> {
+public class Employee implements Serializable, Comparable<Employee> {
 
     private final String id;
     private final String name;
