@@ -124,8 +124,9 @@ public class AuiLabsApplication {
 		}
 
 		System.out.println("===7===");
+
 		for (int poolSize : new int[]{1, 2, 4}) {
-			System.out.println("\n➡️  PoolSize: " + poolSize);
+			System.out.println("PoolSize: " + poolSize);
 
 			ForkJoinPool pool = new ForkJoinPool(poolSize);
 
@@ -137,7 +138,7 @@ public class AuiLabsApplication {
 
 						role.getEmployees().forEach(employee -> {
 							try {
-								Thread.sleep(150);
+								Thread.sleep(1000);
 							} catch (InterruptedException e) {
 								Thread.currentThread().interrupt();
 							}
@@ -147,8 +148,9 @@ public class AuiLabsApplication {
 				}).get();
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-			pool.shutdown();
+			} finally {
+                pool.shutdown();
+            }
 		}
 	}
 }
