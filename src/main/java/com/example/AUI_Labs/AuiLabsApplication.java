@@ -83,8 +83,8 @@ public class AuiLabsApplication {
 
 		System.out.println("===4===");
 		allItems.stream()
-				.filter(e -> !e.getName().contains("Sławomir"))                               // filtruj tylko dostępne
-				.sorted(Comparator.comparing(Employee::getSurname)) // sortuj po cenie
+				.filter(e -> !e.getName().contains("Sławomir"))
+				.sorted(Comparator.comparing(Employee::getSurname))
 				.forEach(System.out::println);
 
 		System.out.println("===5===");
