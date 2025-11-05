@@ -125,7 +125,7 @@ public class AuiLabsApplication {
 
 		System.out.println("===7===");
 
-		for (int poolSize : new int[]{1, 2, 4}) {
+		for (int poolSize : new int[]{1, 2, 3}) {
 			System.out.println("PoolSize: " + poolSize);
 
 			ForkJoinPool pool = new ForkJoinPool(poolSize);
