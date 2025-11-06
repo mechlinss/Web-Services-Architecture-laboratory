@@ -1,7 +1,7 @@
 package com.example.AUI_Labs.cli;
 
-import com.example.AUI_Labs.model.Employee;
-import com.example.AUI_Labs.model.EmployeeRole;
+import com.example.AUI_Labs.entity.Employee;
+import com.example.AUI_Labs.entity.EmployeeRole;
 import com.example.AUI_Labs.service.EmployeeRoleService;
 import com.example.AUI_Labs.service.EmployeeService;
 import jakarta.transaction.Transactional;
@@ -126,9 +126,9 @@ public class ConsoleRunner implements CommandLineRunner {
             return;
         }
         for (EmployeeRole r : roles) {
-            String id = r.getId();
+            UUID id = r.getId();
             int size = r.getEmployees() != null ? r.getEmployees().size() : 0;
-            System.out.println(id + " | " + r.getName() + " | employees: " + size);
+            System.out.println(id + " | " + r.getName() + " | salary: " + r.getSalary() + " | employees: " + size);
         }
     }
 
@@ -139,8 +139,8 @@ public class ConsoleRunner implements CommandLineRunner {
             return;
         }
         for (Employee e : employees) {
-            String id = e.getId();
-            String roleName = (e.getRole() != null) ? e.getRole().getName() : "null";
+            UUID id = e.getId();
+            String roleName = (e.getEmployeeRole() != null) ? e.getEmployeeRole().getName() : "null";
             System.out.println(id + " | " + e.getSurname() + " " + e.getName() + " | role: " + roleName);
         }
     }
@@ -148,7 +148,7 @@ public class ConsoleRunner implements CommandLineRunner {
     private void listEmployeesByRole(String roleIdStr) {
         try {
             UUID roleId = UUID.fromString(roleIdStr.trim());
-            List<Employee> employees = employeeService.findByRoleId(roleId);
+            List<Employee> employees = employeeService.findByRole(roleId);
             if (employees.isEmpty()) {
                 System.out.println("No employees found for role " + roleId);
                 return;
@@ -208,11 +208,11 @@ public class ConsoleRunner implements CommandLineRunner {
         }
 
         EmployeeRole chosen = roles.get(idx);
-        Employee newEmp = Employee.builder()
+        Employee newEmp = new Employee.Builder()
                 .id(UUID.randomUUID())
                 .name(name)
                 .surname(surname)
-                .role(chosen)
+                .employeeRole(chosen)
                 .build();
         employeeService.save(newEmp);
         System.out.println("Added employee: " + newEmp.getId());
@@ -241,14 +241,18 @@ public class ConsoleRunner implements CommandLineRunner {
             return;
         }
 
+        System.out.print("Salary: ");
+        Float salary = Float.parseFloat(scanner.nextLine());
+
         Optional<EmployeeRole> existing = roleService.findByName(name);
         if (existing.isPresent()) {
             System.out.println("Role with name '" + name + "' already exists with id " + existing.get().getId());
             return;
         }
-        EmployeeRole role = EmployeeRole.builder()
+        EmployeeRole role = new EmployeeRole.Builder()
                 .id(UUID.randomUUID())
                 .name(name)
+                .salary(salary)
                 .build();
         roleService.save(role);
         System.out.println("Added role: " + role.getId() + " | " + role.getName());

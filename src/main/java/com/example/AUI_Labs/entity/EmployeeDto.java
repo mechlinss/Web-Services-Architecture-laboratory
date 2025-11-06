@@ -1,4 +1,4 @@
-package com.example.AUI_Labs.model;
+package com.example.AUI_Labs.entity;
 
 public class EmployeeDto implements Comparable<EmployeeDto> {
     private final String id;

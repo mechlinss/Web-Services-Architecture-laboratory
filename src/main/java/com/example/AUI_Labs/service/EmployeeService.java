@@ -1,47 +1,42 @@
 package com.example.AUI_Labs.service;
 
-import com.example.AUI_Labs.model.Employee;
+import com.example.AUI_Labs.entity.*;
 import com.example.AUI_Labs.repository.EmployeeRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
 @Service
 public class EmployeeService {
+    private final EmployeeRepository employeeRepository;
 
-    private final EmployeeRepository repo;
-
-    public EmployeeService(EmployeeRepository repo) {
-        this.repo = repo;
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Employee> findAll() {
-        return repo.findAll();
+        return employeeRepository.findAll();
     }
 
     public Optional<Employee> findById(UUID id) {
-        return repo.findById(id);
+        return employeeRepository.findById(id);
     }
 
-    public void save(Employee employee) {
-        repo.save(employee);
+    public List<Employee> findByRole(UUID id) {
+        return employeeRepository.findByEmployeeRole_Id(id);
+    }
+
+    public List<Employee> findByRoleName(String name) {
+        return employeeRepository.findByEmployeeRole_Name(name);
+    }
+
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
     }
 
     public void deleteById(UUID id) {
-        repo.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 
-    @Transactional
-    public List<Employee> findByRoleId(UUID roleId) {
-        return repo.findByRole_Id(roleId);
-    }
-
-    @Transactional
-    public List<Employee> findByRoleName(String roleName) {
-        return repo.findByRole_Name(roleName);
-    }
 }

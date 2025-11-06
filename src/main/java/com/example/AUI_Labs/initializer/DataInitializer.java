@@ -1,7 +1,7 @@
 package com.example.AUI_Labs.initializer;
 
-import com.example.AUI_Labs.model.Employee;
-import com.example.AUI_Labs.model.EmployeeRole;
+import com.example.AUI_Labs.entity.Employee;
+import com.example.AUI_Labs.entity.EmployeeRole;
 import com.example.AUI_Labs.service.EmployeeRoleService;
 import com.example.AUI_Labs.service.EmployeeService;
 import jakarta.annotation.PostConstruct;
@@ -21,9 +21,9 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        EmployeeRole salesman = new EmployeeRole.Builder().name("Salesman").build();
-        EmployeeRole cleaner = new EmployeeRole.Builder().name("Cleaner").build();
-        EmployeeRole technician = new EmployeeRole.Builder().name("Technician").build();
+        EmployeeRole salesman = new EmployeeRole.Builder().name("Salesman").salary(50.0f).build();
+        EmployeeRole cleaner = new EmployeeRole.Builder().name("Cleaner").salary(40.0f).build();
+        EmployeeRole technician = new EmployeeRole.Builder().name("Technician").salary(60.0f).build();
 
         roleService.save(salesman);
         roleService.save(cleaner);
@@ -32,19 +32,19 @@ public class DataInitializer {
         Employee e1 = new Employee.Builder()
                 .name("Wojciech")
                 .surname("Nieszczęsny")
-                .role(cleaner)
+                .employeeRole(cleaner)
                 .build();
 
         Employee e2 = new Employee.Builder()
                 .name("Andrzej")
                 .surname("Lipny")
-                .role(technician)
+                .employeeRole(technician)
                 .build();
 
         Employee e3 = new Employee.Builder()
                 .name("Agata")
                 .surname("Herbata")
-                .role(salesman)
+                .employeeRole(salesman)
                 .build();
 
         employeeService.save(e1);
