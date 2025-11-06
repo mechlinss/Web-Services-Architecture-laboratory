@@ -270,7 +270,7 @@ public class ConsoleRunner implements CommandLineRunner {
             EmployeeRole role = opt.get();
             int count = role.getEmployees() != null ? role.getEmployees().size() : 0;
             if (count > 0) {
-                System.out.println("Warning: role has " + count + " employees. Deleting role will set their role to null or cascade depending on mapping.");
+                System.out.println("Warning: role has " + count + " employees.");
             }
             roleService.deleteById(id);
             System.out.println("Deleted role: " + idStr);
