@@ -1,4 +1,4 @@
-package com.example.AUI_Labs;
+package com.example.AUI_Labs.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -57,7 +57,7 @@ public class EmployeeRole implements Serializable, Comparable<EmployeeRole> {
         if (employee.getRole() != this) employee.setRole(this);
     }
 
-    public List<Employee> getEmployees() { return employees; }
+    public List<Employee> getEmployees() {  return employees; }
     public String getName() { return name; }
     public UUID getUuid() { return id; }
     public String getId() { return id != null ? id.toString() : null; }

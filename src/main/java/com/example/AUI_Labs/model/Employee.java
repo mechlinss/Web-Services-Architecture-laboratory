@@ -1,4 +1,4 @@
-package com.example.AUI_Labs;
+package com.example.AUI_Labs.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -20,7 +20,7 @@ public class Employee implements Serializable, Comparable<Employee> {
     @Column(name = "surname", nullable = false)
     private String surname;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private EmployeeRole role;
 
