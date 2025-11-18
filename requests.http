@@ -1,0 +1,110 @@
+### Employee Role Endpoints
+
+### Get all employee roles
+GET http://localhost:8080/api/employee-roles
+Accept: application/json
+
+### Get employee role by ID
+GET http://localhost:8080/api/employee-roles/9351aa22-3cd2-42c9-a07e-e293344908c3
+Accept: application/json
+
+### Create new employee role
+POST http://localhost:8080/api/employee-roles
+Content-Type: application/json
+
+{
+  "name": "IT Specialist",
+  "department": "IT Department",
+  "description": "Maintains software applications and devices"
+}
+
+### Update employee role
+PUT http://localhost:8080/api/employee-roles/3d5423c0-ea7a-450c-a2cd-f3e7eab9c281
+Content-Type: application/json
+
+{
+  "name": "Senior Fullstack Developer",
+  "department": "IT Department",
+  "description": "Maintains company's applications"
+}
+
+### Delete employee role
+DELETE http://localhost:8080/api/employee-roles/3d5423c0-ea7a-450c-a2cd-f3e7eab9c281
+
+### Get all employees for specific role
+GET http://localhost:8080/api/employee-roles/cd2a1f75-84aa-4211-829e-b7444ed522d8/employees
+Accept: application/json
+
+###############################################################################
+
+### Employee Endpoints
+
+### Get all employees
+GET http://localhost:8080/api/employees
+Accept: application/json
+
+### Get employee by ID
+GET http://localhost:8080/api/employees/962f8c18-2cd1-4625-abee-47db57b03eb7
+Accept: application/json
+
+### Create new employee
+POST http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "name": "Jan",
+  "surname": "Kowalski",
+  "salary": 50.0,
+  "phoneNumber": "48123456789",
+  "employeeRoleId": "b0ed5110-4c62-4be8-abf5-2018b9781c62"
+}
+
+### Update employee
+PUT http://localhost:8080/api/employees/92fb2b81-fd70-4e47-8616-cc604bb98031
+Content-Type: application/json
+
+{
+  "name": "Patryk",
+  "surname": "Nowak",
+  "salary": 60.0,
+  "phoneNumber": "48987654321",
+  "employeeRoleId": "b0ed5110-4c62-4be8-abf5-2018b9781c62"
+}
+
+### Delete employee
+DELETE http://localhost:8080/api/employees/92fb2b81-fd70-4e47-8616-cc604bb98031
+
+###############################################################################
+
+### Error Testing
+
+### Test - Get non-existent employee (should return 404)
+GET http://localhost:8080/api/employees/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Test - Create employee with invalid role (should return 400)
+POST http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "surname": "User",
+  "salary": 5000.0,
+  "phoneNumber": "+48111222333",
+  "employeeRoleId": "00000000-0000-0000-0000-000000000000"
+}
+
+### Test - Update non-existent employee (should return 404)
+PUT http://localhost:8080/api/employees/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "surname": "User",
+  "salary": 5000.0,
+  "phoneNumber": "+48111222333",
+  "employeeRoleId": "00000000-0000-0000-0000-000000000000"
+}
+
+### Test - Delete non-existent employee (should return 404)
+DELETE http://localhost:8080/api/employees/00000000-0000-0000-0000-000000000000

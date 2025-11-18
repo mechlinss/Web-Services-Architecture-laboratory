@@ -15,6 +15,7 @@ public class EmployeeRoleService {
     public EmployeeRoleService(EmployeeRoleRepository employeeRoleRepository) {
         this.employeeRoleRepository = employeeRoleRepository;
     }
+
     public List<EmployeeRole> findAll() {
         return employeeRoleRepository.findAll();
     }
@@ -27,13 +28,10 @@ public class EmployeeRoleService {
         return employeeRoleRepository.findByName(name);
     }
 
-    public List<EmployeeRole> findBySalary(Float salary) {
-        return employeeRoleRepository.findBySalary(salary);
-    }
-
     public EmployeeRole save(EmployeeRole role) {
         return employeeRoleRepository.save(role);
     }
+
     public void deleteById(UUID id) {
         employeeRoleRepository.deleteById(id);
     }

@@ -1,19 +1,16 @@
 package com.example.AUI_Labs.dto;
 
-public class RoleReadDto {
+public class EmployeeRoleListDto {
     private String id;
     private String name;
 
-    public RoleReadDto() {}
+    public EmployeeRoleListDto() {}
 
-    public RoleReadDto(String id, String name) {
+    public EmployeeRoleListDto(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public String getId() { return id; }
     public String getName() { return name; }
-
-    public void setId(String id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
 }

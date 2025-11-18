@@ -16,8 +16,11 @@ public class EmployeeRole implements Comparable<EmployeeRole>, Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "salary", nullable = false)
-    private Float salary;
+    @Column(name = "description", length = 1000)
+    private String description;
+
+    @Column(name = "department")
+    private String department;
 
     @OneToMany(mappedBy = "employeeRole", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Employee> employees = new ArrayList<>();
@@ -27,7 +30,8 @@ public class EmployeeRole implements Comparable<EmployeeRole>, Serializable {
     private EmployeeRole(Builder b) {
         this.id = b.id != null ? b.id : UUID.randomUUID();
         this.name = b.name;
-        this.salary = b.salary;
+        this.description = b.description;
+        this.department = b.department;
         if (b.employees != null) {
             this.employees = b.employees;
             for (Employee e : this.employees) {
@@ -38,7 +42,8 @@ public class EmployeeRole implements Comparable<EmployeeRole>, Serializable {
 
     public UUID getId() { return id; }
     public String getName() { return name; }
-    public Float getSalary() { return salary; }
+    public String getDescription() { return description; }
+    public String getDepartment() { return department; }
     public List<Employee> getEmployees() { return Collections.unmodifiableList(employees); }
 
     public void addEmployee(Employee e) {
@@ -52,12 +57,14 @@ public class EmployeeRole implements Comparable<EmployeeRole>, Serializable {
     public static class Builder {
         private UUID id;
         private String name;
-        private Float salary;
+        private String description;
+        private String department;
         private List<Employee> employees;
 
         public Builder id(UUID id){ this.id = id; return this; }
         public Builder name(String name){ this.name = name; return this; }
-        public Builder salary(Float salary){ this.salary = salary; return this; }
+        public Builder description(String description){ this.description = description; return this; }
+        public Builder department(String department){ this.department = department; return this; }
         public Builder employees(List<Employee> employees){ this.employees = employees; return this; }
         public EmployeeRole build(){ return new EmployeeRole(this); }
     }
@@ -83,6 +90,6 @@ public class EmployeeRole implements Comparable<EmployeeRole>, Serializable {
 
     @Override
     public String toString() {
-        return "Employee role: " + name + " | " + id + " | salary: " + salary;
+        return "Employee role: " + name + " | " + id + " | department: " + department  + " | description: " + description;
     }
 }

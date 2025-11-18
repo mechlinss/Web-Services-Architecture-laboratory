@@ -23,11 +23,11 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
 
-    public List<Employee> findByRole(UUID id) {
+    public List<Employee> findByEmployeeRole_Id(UUID id) {
         return employeeRepository.findByEmployeeRole_Id(id);
     }
 
-    public List<Employee> findByRoleName(String name) {
+    public List<Employee> findByEmployeeRoleName(String name) {
         return employeeRepository.findByEmployeeRole_Name(name);
     }
 

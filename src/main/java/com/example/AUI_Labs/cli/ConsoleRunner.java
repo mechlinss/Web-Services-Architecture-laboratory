@@ -128,7 +128,7 @@ public class ConsoleRunner implements CommandLineRunner {
         for (EmployeeRole r : roles) {
             UUID id = r.getId();
             int size = r.getEmployees() != null ? r.getEmployees().size() : 0;
-            System.out.println(id + " | " + r.getName() + " | salary: " + r.getSalary() + " | employees: " + size);
+            System.out.println(id + " | " + r.getName() + " | department: " + r.getDepartment() + " | employees: " + size);
         }
     }
 
@@ -148,7 +148,7 @@ public class ConsoleRunner implements CommandLineRunner {
     private void listEmployeesByRole(String roleIdStr) {
         try {
             UUID roleId = UUID.fromString(roleIdStr.trim());
-            List<Employee> employees = employeeService.findByRole(roleId);
+            List<Employee> employees = employeeService.findByEmployeeRole_Id(roleId);
             if (employees.isEmpty()) {
                 System.out.println("No employees found for role " + roleId);
                 return;
@@ -163,7 +163,7 @@ public class ConsoleRunner implements CommandLineRunner {
 
     private void listEmployeesByRoleName(String roleNameStr) {
         try {
-            List<Employee> employees = employeeService.findByRoleName(roleNameStr.trim());
+            List<Employee> employees = employeeService.findByEmployeeRoleName(roleNameStr.trim());
             if (employees.isEmpty()) {
                 System.out.println("No employees found for role " + roleNameStr);
                 return;
@@ -181,6 +181,10 @@ public class ConsoleRunner implements CommandLineRunner {
         String name = scanner.nextLine().trim();
         System.out.print("Surname: ");
         String surname = scanner.nextLine().trim();
+        System.out.print("Salary: ");
+        Double salary = scanner.nextDouble();
+        System.out.print("Phone number: ");
+        String phoneNumber = scanner.nextLine().trim();
 
         List<EmployeeRole> roles = roleService.findAll();
         if (roles.isEmpty()) {
@@ -212,6 +216,8 @@ public class ConsoleRunner implements CommandLineRunner {
                 .id(UUID.randomUUID())
                 .name(name)
                 .surname(surname)
+                .salary(salary)
+                .phoneNumber(phoneNumber)
                 .employeeRole(chosen)
                 .build();
         employeeService.save(newEmp);
@@ -241,8 +247,15 @@ public class ConsoleRunner implements CommandLineRunner {
             return;
         }
 
-        System.out.print("Salary: ");
-        Float salary = Float.parseFloat(scanner.nextLine());
+        System.out.print("Department name: ");
+        String department = scanner.nextLine().trim();
+        if (department.isEmpty()) {
+            System.out.println("Department name cannot be empty");
+            return;
+        }
+
+        System.out.print("Department name: ");
+        String description = scanner.nextLine().trim();
 
         Optional<EmployeeRole> existing = roleService.findByName(name);
         if (existing.isPresent()) {
@@ -252,7 +265,8 @@ public class ConsoleRunner implements CommandLineRunner {
         EmployeeRole role = new EmployeeRole.Builder()
                 .id(UUID.randomUUID())
                 .name(name)
-                .salary(salary)
+                .department(department)
+                .description(description)
                 .build();
         roleService.save(role);
         System.out.println("Added role: " + role.getId() + " | " + role.getName());

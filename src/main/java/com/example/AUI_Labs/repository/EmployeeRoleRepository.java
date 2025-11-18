@@ -10,6 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface EmployeeRoleRepository extends JpaRepository<EmployeeRole, UUID> {
-    List<EmployeeRole> findBySalary(Float salary);
     Optional<EmployeeRole> findByName(String name);
 }

@@ -21,9 +21,9 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        EmployeeRole salesman = new EmployeeRole.Builder().name("Salesman").salary(50.0f).build();
-        EmployeeRole cleaner = new EmployeeRole.Builder().name("Cleaner").salary(40.0f).build();
-        EmployeeRole technician = new EmployeeRole.Builder().name("Technician").salary(60.0f).build();
+        EmployeeRole salesman = new EmployeeRole.Builder().name("Salesman").department("Reception").description("Responsible for client service").build();
+        EmployeeRole cleaner = new EmployeeRole.Builder().name("Cleaner").department("Everywhere").description("Responsible for keeping the workspace clean").build();
+        EmployeeRole technician = new EmployeeRole.Builder().name("Technician").department("Workshop").description("Responsible for repairing broken stuff").build();
 
         roleService.save(salesman);
         roleService.save(cleaner);
@@ -32,18 +32,24 @@ public class DataInitializer {
         Employee e1 = new Employee.Builder()
                 .name("Wojciech")
                 .surname("Nieszczęsny")
+                .salary(45.0)
+                .phoneNumber("111222333")
                 .employeeRole(cleaner)
                 .build();
 
         Employee e2 = new Employee.Builder()
                 .name("Andrzej")
                 .surname("Lipny")
+                .salary(60.0)
+                .phoneNumber("444555666")
                 .employeeRole(technician)
                 .build();
 
         Employee e3 = new Employee.Builder()
                 .name("Agata")
                 .surname("Herbata")
+                .salary(50.0)
+                .phoneNumber("222333111")
                 .employeeRole(salesman)
                 .build();
 
