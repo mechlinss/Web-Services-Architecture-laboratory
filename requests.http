@@ -5,7 +5,7 @@ GET http://localhost:8080/api/employee-roles
 Accept: application/json
 
 ### Get employee role by ID
-GET http://localhost:8080/api/employee-roles/9351aa22-3cd2-42c9-a07e-e293344908c3
+GET http://localhost:8080/api/employee-roles/128fa029-f213-4b9f-993c-e11731f2a8a9
 Accept: application/json
 
 ### Create new employee role
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Update employee role
-PUT http://localhost:8080/api/employee-roles/3d5423c0-ea7a-450c-a2cd-f3e7eab9c281
+PUT http://localhost:8080/api/employee-roles/9dbe46eb-d5bb-4941-8719-ea78ca45c3dc
 Content-Type: application/json
 
 {
@@ -29,10 +29,10 @@ Content-Type: application/json
 }
 
 ### Delete employee role
-DELETE http://localhost:8080/api/employee-roles/3d5423c0-ea7a-450c-a2cd-f3e7eab9c281
+DELETE http://localhost:8080/api/employee-roles/128fa029-f213-4b9f-993c-e11731f2a8a9
 
 ### Get all employees for specific role
-GET http://localhost:8080/api/employee-roles/cd2a1f75-84aa-4211-829e-b7444ed522d8/employees
+GET http://localhost:8080/api/employees/roles/58b429b2-9946-4243-9ca1-f8905a165fb6
 Accept: application/json
 
 ###############################################################################
@@ -44,7 +44,7 @@ GET http://localhost:8080/api/employees
 Accept: application/json
 
 ### Get employee by ID
-GET http://localhost:8080/api/employees/962f8c18-2cd1-4625-abee-47db57b03eb7
+GET http://localhost:8082/api/employees/e9674fd8-b4f2-4f1c-942f-7bbda8208f85
 Accept: application/json
 
 ### Create new employee
@@ -56,11 +56,11 @@ Content-Type: application/json
   "surname": "Kowalski",
   "salary": 50.0,
   "phoneNumber": "48123456789",
-  "employeeRoleId": "b0ed5110-4c62-4be8-abf5-2018b9781c62"
+  "employeeRoleId": "58b429b2-9946-4243-9ca1-f8905a165fb6"
 }
 
 ### Update employee
-PUT http://localhost:8080/api/employees/92fb2b81-fd70-4e47-8616-cc604bb98031
+PUT http://localhost:8080/api/employees/fd78218d-a70e-4abc-a005-71de12d44bb3
 Content-Type: application/json
 
 {
@@ -68,11 +68,11 @@ Content-Type: application/json
   "surname": "Nowak",
   "salary": 60.0,
   "phoneNumber": "48987654321",
-  "employeeRoleId": "b0ed5110-4c62-4be8-abf5-2018b9781c62"
+  "employeeRoleId": "58b429b2-9946-4243-9ca1-f8905a165fb6"
 }
 
 ### Delete employee
-DELETE http://localhost:8080/api/employees/92fb2b81-fd70-4e47-8616-cc604bb98031
+DELETE http://localhost:8080/api/employees/1f565833-d79d-4b82-adee-589edeb9cbc0
 
 ###############################################################################
 
