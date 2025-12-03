@@ -13,7 +13,7 @@ This is an Angular frontend application for managing categories (employee roles)
 
 - Node.js (v18+)
 - npm (v9+)
-- Backend gateway running on port 8080 (default)
+- Backend gateway running on port 8080 (default) with CORS enabled
 
 ## Installation
 
@@ -48,6 +48,10 @@ export const environment = {
 To connect to a different gateway:
 1. Edit `src/environments/environment.ts` for development
 2. Edit `src/environments/environment.prod.ts` for production
+
+### CORS Configuration
+
+The gateway must have CORS enabled to allow requests from the Angular frontend. The gateway's `application.yml` includes CORS configuration for `http://localhost:4200`. If you're running the frontend on a different port or domain, update the gateway's CORS configuration accordingly.
 
 ## Build
 

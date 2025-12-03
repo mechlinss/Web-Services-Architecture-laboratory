@@ -5,7 +5,7 @@ A microservices-based application with an Angular frontend for managing employee
 ## Architecture Overview
 
 This project consists of:
-- **Gateway** (port 8080) - Spring Cloud Gateway routing requests to services
+- **Gateway** (port 8080) - Spring Cloud Gateway routing requests to services with CORS support
 - **Role Service** (port 8081) - Manages employee roles
 - **Employee Service** (port 8082) - Manages employees
 - **Frontend** (port 4200) - Angular application for user interface
@@ -34,6 +34,8 @@ cd employee-service
 cd gateway
 ./mvnw spring-boot:run
 ```
+
+**Note:** The gateway includes CORS configuration to allow requests from `http://localhost:4200`. If you run the frontend on a different port/domain, update `gateway/src/main/resources/application.yml`.
 
 ## Running the Frontend
 
