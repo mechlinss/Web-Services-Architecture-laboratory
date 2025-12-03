@@ -1,0 +1,43 @@
+<div class="container">
+  <button class="btn btn-secondary" (click)="backToList()">Back to Categories</button>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="!loading && category">
+    <h1>Category Details</h1>
+    
+    <div class="details">
+      <p><strong>Name:</strong> {{ category.name }}</p>
+      <p *ngIf="category.department"><strong>Department:</strong> {{ category.department }}</p>
+      <p *ngIf="category.description"><strong>Description:</strong> {{ category.description }}</p>
+    </div>
+
+    <hr>
+
+    <h2>Elements</h2>
+    <button class="btn btn-primary" (click)="addElement()">Add Element</button>
+
+    <table *ngIf="elements.length > 0" class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of elements">
+          <td>{{ element.name }}</td>
+          <td class="actions">
+            <button class="btn btn-info" (click)="viewElementDetails(element.id)">Details</button>
+            <button class="btn btn-warning" (click)="editElement(element.id)">Edit</button>
+            <button class="btn btn-danger" (click)="deleteElement(element.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="elements.length === 0">No elements found.</p>
+  </div>
+
+  <p *ngIf="!loading && !category">Category not found.</p>
+</div>

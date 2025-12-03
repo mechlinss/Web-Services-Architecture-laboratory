@@ -1,0 +1,19 @@
+<div class="container">
+  <button class="btn btn-secondary" (click)="backToCategory()">Back to Category</button>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="!loading && element">
+    <h1>Element Details</h1>
+    
+    <div class="details">
+      <p><strong>Name:</strong> {{ element.name }}</p>
+      <p *ngIf="element.surname"><strong>Surname:</strong> {{ element.surname }}</p>
+      <p *ngIf="element.roleName"><strong>Role:</strong> {{ element.roleName }}</p>
+      <p *ngIf="element.salary !== undefined && element.salary !== null"><strong>Salary:</strong> {{ element.salary }}</p>
+      <p *ngIf="element.phoneNumber"><strong>Phone Number:</strong> {{ element.phoneNumber }}</p>
+    </div>
+  </div>
+
+  <p *ngIf="!loading && !element">Element not found.</p>
+</div>
