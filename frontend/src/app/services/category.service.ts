@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class CategoryService {
   private readonly baseUrl = `${environment.apiBaseUrl}/api/employee-roles`;
+  private readonly employeesUrl = `${environment.apiBaseUrl}/api/employees`;
 
   constructor(private http: HttpClient) {}
 
@@ -45,7 +46,7 @@ export class CategoryService {
   }
 
   getElements(categoryId: string): Observable<Element[]> {
-    return this.http.get<Element[]>(`${environment.apiBaseUrl}/api/employees/roles/${categoryId}`).pipe(
+    return this.http.get<Element[]>(`${this.employeesUrl}/roles/${categoryId}`).pipe(
       catchError(this.handleError)
     );
   }
