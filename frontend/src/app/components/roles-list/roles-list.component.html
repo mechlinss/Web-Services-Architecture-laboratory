@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>Employee roles</h1>
+
+  <button class="btn btn-primary" (click)="addRole()">Add role</button>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <table *ngIf="!loading && roles.length > 0" class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let role of roles">
+        <td>{{ role.name }}</td>
+        <td class="actions">
+          <button class="btn btn-info" (click)="viewDetails(role.id)">Details</button>
+          <button class="btn btn-warning" (click)="editRole(role.id)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteRole(role.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && roles.length === 0">No roles found.</p>
+</div>

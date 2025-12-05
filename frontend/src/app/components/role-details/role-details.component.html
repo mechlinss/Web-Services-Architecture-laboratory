@@ -1,0 +1,47 @@
+<div class="container">
+  <button class="btn btn-secondary" (click)="backToList()">Back to Roles</button>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="!loading && role">
+    <h1>Role Details</h1>
+    
+    <div class="details">
+      <p><strong>Name:</strong> {{ role.name }}</p>
+      <p *ngIf="role.department"><strong>Department:</strong> {{ role.department }}</p>
+      <p *ngIf="role.description"><strong>Description:</strong> {{ role.description }}</p>
+    </div>
+
+    <button class="btn btn-warning" (click)="editRole()">Edit Role</button>
+
+    <hr>
+
+    <h2>Employees</h2>
+    <button class="btn btn-primary" (click)="addEmployee()">Add Employee</button>
+
+    <table *ngIf="employees.length > 0" class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.surname }}</td>
+          <td class="actions">
+            <button class="btn btn-info" (click)="viewEmployeeDetails(employee.id)">Details</button>
+            <button class="btn btn-warning" (click)="editEmployee(employee.id)">Edit</button>
+            <button class="btn btn-danger" (click)="deleteEmployee(employee.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="employees.length === 0">No employees found.</p>
+  </div>
+
+  <p *ngIf="!loading && !role">Role not found.</p>
+</div>

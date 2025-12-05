@@ -1,0 +1,21 @@
+<div class="container">
+  <button class="btn btn-secondary" (click)="backToRole()">Back to Role</button>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="!loading && employee">
+    <h1>Employee Details</h1>
+    
+    <div class="details">
+      <p><strong>Name:</strong> {{ employee.name }}</p>
+      <p *ngIf="employee.surname"><strong>Surname:</strong> {{ employee.surname }}</p>
+      <p *ngIf="employee.roleName"><strong>Role:</strong> {{ employee.roleName }}</p>
+      <p *ngIf="employee.salary !== undefined && employee.salary !== null"><strong>Salary:</strong> {{ employee.salary }}</p>
+      <p *ngIf="employee.phoneNumber"><strong>Phone Number:</strong> {{ employee.phoneNumber }}</p>
+    </div>
+
+    <button class="btn btn-warning" (click)="editEmployee()">Edit Employee</button>
+  </div>
+
+  <p *ngIf="!loading && !employee">Employee not found.</p>
+</div>
