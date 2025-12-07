@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  # Frontend service (Angular with NGINX)
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    ports:
+      - "4200:80"
+    environment:
+      - API_URL=http://gateway:8080
+    depends_on:
+      - gateway
+    networks:
+      - app-network
+
+  # API Gateway service
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - ROLE_SERVICE_URL=http://role-service:8081
+      - EMPLOYEE_SERVICE_URL=http://employee-service:8082
+      - ALLOWED_ORIGINS=http://localhost:4200
+    depends_on:
+      - role-service
+      - employee-service
+    networks:
+      - app-network
+
+  # Role service (Spring Boot)
+  role-service:
+    build:
+      context: .
+      dockerfile: docker/role-service/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-role:5432/role_db
+      - SPRING_DATASOURCE_USERNAME=role_user
+      - SPRING_DATASOURCE_PASSWORD=role_pass
+      - SPRING_DATASOURCE_DRIVER=org.postgresql.Driver
+      - SPRING_JPA_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - postgres-role
+    networks:
+      - app-network
+
+  # Employee service (Spring Boot)
+  employee-service:
+    build:
+      context: .
+      dockerfile: docker/employee-service/Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-employee:5432/employee_db
+      - SPRING_DATASOURCE_USERNAME=employee_user
+      - SPRING_DATASOURCE_PASSWORD=employee_pass
+      - SPRING_DATASOURCE_DRIVER=org.postgresql.Driver
+      - SPRING_JPA_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - postgres-employee
+    networks:
+      - app-network
+
+  # PostgreSQL database for role service
+  postgres-role:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=role_db
+      - POSTGRES_USER=role_user
+      - POSTGRES_PASSWORD=role_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_role:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # PostgreSQL database for employee service
+  postgres-employee:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=employee_db
+      - POSTGRES_USER=employee_user
+      - POSTGRES_PASSWORD=employee_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata_employee:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  pgdata_role:
+  pgdata_employee:
+
+networks:
+  app-network:
+    driver: bridge
