@@ -2,21 +2,17 @@
 
 ## Prerequisites
 - Docker and Docker Compose installed
-- Maven (for building JAR files)
 
 ## Quick Start
 
-### 1. Build the Spring Boot Applications
-```bash
-./mvnw clean package -DskipTests
-```
-
-### 2. Start All Services
+### 1. Start All Services
 ```bash
 docker-compose up --build
 ```
 
-### 3. Access the Application
+The Spring Boot applications will be built automatically inside the Docker containers using multi-stage builds.
+
+### 2. Access the Application
 - **Frontend**: http://localhost:4200
 - **API Gateway**: http://localhost:8080
 - **Role Service**: http://localhost:8081
@@ -24,7 +20,7 @@ docker-compose up --build
 - **PostgreSQL (Role)**: localhost:5433
 - **PostgreSQL (Employee)**: localhost:5434
 
-### 4. Stop Services
+### 3. Stop Services
 ```bash
 docker-compose down
 ```
@@ -41,7 +37,8 @@ docker-compose down
    - Gateway service (port 8080)
    - Role service (port 8081)
    - Employee service (port 8082)
-   - All using Eclipse Temurin 17 JDK Alpine
+   - All using multi-stage builds with Eclipse Temurin 17 JDK Alpine
+   - Maven builds happen inside Docker containers
    - Located at: `docker/gateway/`, `docker/role-service/`, `docker/employee-service/`
 
 3. **Database Containers** (PostgreSQL)
@@ -106,10 +103,12 @@ Gateway (8080:8080)
 ## Troubleshooting
 
 ### Build Failures
-Ensure JAR files exist:
+If Docker build fails, check the logs:
 ```bash
-./mvnw clean package -DskipTests
+docker-compose logs [service-name]
 ```
+
+The builds happen inside Docker containers, so no local Maven installation is needed.
 
 ### Port Conflicts
 Check if ports 4200, 8080-8082, 5433-5434 are available.

@@ -16,40 +16,40 @@ The application consists of:
 
 - Docker (version 20.10 or higher)
 - Docker Compose (version 2.0 or higher)
-- Maven (for building Spring Boot applications)
-- Node.js 18+ and npm (for building Angular application)
+
+**Note**: Maven and Node.js are NOT required! All builds happen inside Docker containers using multi-stage builds.
 
 ## Quick Start
 
-### Option 1: Build and Run Everything with Docker Compose
+### Build and Run Everything with Docker Compose
 
-1. **Build the Spring Boot applications** (generate JAR files):
-   ```bash
-   ./mvnw clean package -DskipTests
-   ```
-
-2. **Build and start all services**:
+1. **Build and start all services**:
    ```bash
    docker-compose up --build
    ```
-
-3. **Access the application**:
+   
+   This command will:
+   - Build Spring Boot applications inside Docker containers using Maven
+   - Build Angular application inside Docker container using npm
+   - Start all services including databases
+   
+2. **Access the application**:
    - Frontend: http://localhost:4200
    - API Gateway: http://localhost:8080
    - Role Service: http://localhost:8081
    - Employee Service: http://localhost:8082
 
-4. **Stop all services**:
+3. **Stop all services**:
    ```bash
    docker-compose down
    ```
 
-5. **Stop and remove volumes** (removes database data):
+4. **Stop and remove volumes** (removes database data):
    ```bash
    docker-compose down -v
    ```
 
-### Option 2: Run Services Individually
+### Run Services Individually
 
 You can also run specific services:
 
@@ -66,7 +66,13 @@ docker-compose up frontend
 
 ## Building the Applications
 
-### Backend Services (Spring Boot)
+**Not required for Docker deployment!** All builds happen automatically inside Docker containers.
+
+### For Local Development Only
+
+If you want to run services locally without Docker:
+
+#### Backend Services (Spring Boot)
 
 Build all services at once:
 ```bash
@@ -80,9 +86,8 @@ cd employee-service && mvn clean package -DskipTests
 cd gateway && mvn clean package -DskipTests
 ```
 
-### Frontend (Angular)
+#### Frontend (Angular)
 
-The frontend is built automatically during Docker image creation. If you want to build it manually:
 ```bash
 cd frontend
 npm install
@@ -90,6 +95,17 @@ npm run build
 ```
 
 ## Docker Configuration
+
+### Multi-Stage Builds
+
+All Spring Boot services use multi-stage Docker builds:
+1. **Build stage**: Uses Eclipse Temurin 17 JDK to compile Java code with Maven
+2. **Runtime stage**: Uses Eclipse Temurin 17 JDK (smaller image) to run the application
+
+This approach:
+- Keeps the final images small
+- Eliminates the need for local Maven installation
+- Ensures consistent builds across all environments
 
 ### Environment Variables
 
@@ -130,10 +146,12 @@ Data is persisted in Docker volumes:
 If you have services running on ports 4200, 8080, 8081, 8082, 5433, or 5434, stop them or modify the port mappings in `docker-compose.yml`.
 
 ### Build Failures
-Ensure all JAR files are built before running `docker-compose up --build`:
-```bash
-./mvnw clean package -DskipTests
-```
+If Docker build fails:
+1. Check the logs: `docker-compose logs [service-name]`
+2. Ensure Docker has enough memory (at least 4GB recommended)
+3. Try rebuilding without cache: `docker-compose build --no-cache`
+
+Builds happen automatically inside Docker containers, so no local Maven installation is needed.
 
 ### Database Connection Issues
 If services can't connect to databases, ensure:

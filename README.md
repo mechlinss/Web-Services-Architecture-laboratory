@@ -4,13 +4,10 @@ Microservices architecture project with Angular frontend and Spring Boot backend
 
 ## 🚀 Quick Start with Docker
 
-The easiest way to run the entire application is using Docker Compose:
+The easiest way to run the entire application is using Docker Compose. All builds happen automatically inside Docker containers:
 
 ```bash
-# Build Spring Boot applications
-./mvnw clean package -DskipTests
-
-# Start all services
+# Start all services (builds Spring Boot apps automatically)
 docker-compose up --build
 ```
 
@@ -32,10 +29,11 @@ The project consists of:
 
 ### Prerequisites
 
-- Java 17
-- Node.js 18+
-- Maven 3.6+
 - Docker and Docker Compose (for containerized deployment)
+- OR for local development:
+  - Java 17
+  - Node.js 18+
+  - Maven 3.6+
 
 ### Running Services Locally
 

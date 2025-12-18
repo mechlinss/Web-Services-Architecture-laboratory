@@ -1,10 +1,30 @@
-# Use Eclipse Temurin JDK 17
+# Stage 1: Build with Maven
+FROM eclipse-temurin:17-jdk-alpine AS build
+
+WORKDIR /workspace
+
+# Copy Maven wrapper and pom files
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY employee-service/pom.xml employee-service/
+
+# Download dependencies
+RUN ./mvnw dependency:go-offline -pl employee-service -am
+
+# Copy source code
+COPY employee-service/src employee-service/src
+
+# Build the application
+RUN ./mvnw clean package -pl employee-service -am -DskipTests
+
+# Stage 2: Run
 FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-# Copy the JAR file
-COPY employee-service/target/*.jar /app/service.jar
+# Copy the JAR file from build stage
+COPY --from=build /workspace/employee-service/target/*.jar /app/service.jar
 
 # Expose port
 EXPOSE 8082

@@ -13,11 +13,13 @@ This PR successfully implements Docker containerization for the entire microserv
 - Build size optimization with multi-stage approach
 
 ### ✅ Backend Docker Configuration
-- Dockerfiles for all three Spring Boot services:
+- Multi-stage Dockerfiles for all three Spring Boot services:
   - Gateway (Spring Cloud Gateway)
   - Role Service (Employee roles API)
   - Employee Service (Employees API)
-- Eclipse Temurin 17 JDK Alpine base images
+- Build stage: Maven compilation inside Docker container
+- Runtime stage: Eclipse Temurin 17 JDK Alpine base images
+- No local Maven installation required
 - Environment variable support for all configurations
 
 ### ✅ Database Configuration
@@ -63,9 +65,18 @@ The gateway configuration was updated from `/api/roles/**` to `/api/employee-rol
 Services are compiled with Java 17 (not Java 21) due to build environment constraints. Docker images use Eclipse Temurin 17 JDK which is fully compatible.
 
 ### Build Process
-Users must build JAR files before running docker-compose:
+**Updated**: Users no longer need to build JAR files manually. All Spring Boot services now use multi-stage Docker builds:
+1. Build stage compiles Java code with Maven inside the container
+2. Runtime stage runs the compiled JAR
+
+Previous approach (now deprecated):
 ```bash
 ./mvnw clean package -DskipTests
+```
+
+New approach:
+```bash
+docker-compose up --build  # Builds everything automatically
 ```
 
 ## Testing Performed
@@ -135,16 +146,15 @@ All services support configuration via environment variables as specified in the
 
 ### Quick Start
 ```bash
-# 1. Build Spring Boot applications
-./mvnw clean package -DskipTests
-
-# 2. Start all services
+# Start all services (builds everything automatically)
 docker-compose up --build
 
-# 3. Access application
+# Access application
 # Frontend: http://localhost:4200
 # Gateway: http://localhost:8080
 ```
+
+No Maven or Node.js installation required! All builds happen inside Docker containers.
 
 ### Stop Services
 ```bash
@@ -171,19 +181,18 @@ All changes have been committed and pushed to the branch:
 2. Test the Docker setup locally:
    ```bash
    git checkout copilot/setup-angular-spring-boot-docker
-   ./mvnw clean package -DskipTests
    docker-compose up --build
    ```
-3. Verify services are accessible
+3. Verify services are accessible at http://localhost:4200
 4. Merge the PR when satisfied
 
 ## Conclusion
 
 All requirements from Laboratory 6 have been successfully implemented:
-✅ Frontend containerization with NGINX
-✅ Spring Boot services containerization
+✅ Frontend containerization with NGINX (multi-stage build)
+✅ Spring Boot services containerization (multi-stage builds with Maven)
 ✅ PostgreSQL database integration
 ✅ Docker Compose orchestration
 ✅ Environment variable configuration
 ✅ Comprehensive documentation
-✅ Build and deployment instructions
+✅ **No local build tools required** - everything builds inside Docker
