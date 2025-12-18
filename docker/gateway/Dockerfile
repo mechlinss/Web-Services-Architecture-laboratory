@@ -9,6 +9,9 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY gateway/pom.xml gateway/
 
+# Make Maven wrapper executable
+RUN chmod +x mvnw
+
 # Download dependencies
 RUN ./mvnw dependency:go-offline -pl gateway -am
 

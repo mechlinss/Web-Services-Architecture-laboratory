@@ -9,6 +9,9 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY employee-service/pom.xml employee-service/
 
+# Make Maven wrapper executable
+RUN chmod +x mvnw
+
 # Download dependencies
 RUN ./mvnw dependency:go-offline -pl employee-service -am
 
