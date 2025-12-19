@@ -13,11 +13,11 @@ public class GatewayConfig {
         return builder.routes()
                 .route("role-service", r -> r
                         .path("/api/employee-roles/**")
-                        .uri("http://localhost:8081"))
+                        .uri("http://role-service:8081"))
 
                 .route("employee-service", r -> r
                         .path("/api/employees/**")
-                        .uri("http://localhost:8082"))
+                        .uri("http://employee-service:8082"))
 
                 .build();
     }

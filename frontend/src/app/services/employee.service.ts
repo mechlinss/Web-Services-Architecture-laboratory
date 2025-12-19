@@ -3,12 +3,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Employee, EmployeeCreate } from '../models/employee.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeService {
-  private readonly baseUrl = 'http://localhost:8080/api/employees';
+  private readonly baseUrl = `${environment.apiBaseUrl}/employees`;
 
   constructor(private http: HttpClient) {}
 

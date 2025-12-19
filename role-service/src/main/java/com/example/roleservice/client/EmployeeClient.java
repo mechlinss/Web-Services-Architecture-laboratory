@@ -19,7 +19,7 @@ public class EmployeeClient {
     private final String employeeServiceUrl;
 
     public EmployeeClient(RestTemplate restTemplate,
-                      @Value("${employee.service.url:http://localhost:8082}") String employeeServiceUrl) {
+                      @Value("${EMPLOYEE_SERVICE_URL:http://localhost:8082}") String employeeServiceUrl) {
         this.restTemplate = restTemplate;
         this.employeeServiceUrl = employeeServiceUrl;
     }

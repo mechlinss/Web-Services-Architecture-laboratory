@@ -4,13 +4,14 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Role, RoleCreate } from '../models/role.model';
 import { Employee } from '../models/employee.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleService {
-  private readonly baseUrl = 'http://localhost:8080/api/employee-roles';
-  private readonly employeesUrl = 'http://localhost:8080/api/employees';
+  private readonly baseUrl = `${environment.apiBaseUrl}/employee-roles`;
+  private readonly employeesUrl = `${environment.apiBaseUrl}/employees`;
 
   constructor(private http: HttpClient) {}
 

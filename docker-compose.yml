@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+
+  role-db:
+    image: postgres:16
+    container_name: role-db
+    environment:
+      POSTGRES_DB: roledb
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: role
+    ports:
+      - "5433:5432"
+    volumes:
+      - role_data:/var/lib/postgresql/data
+
+  employee-db:
+    image: postgres:16
+    container_name: employee-db
+    environment:
+      POSTGRES_DB: employeedb
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: employee
+    ports:
+      - "5434:5432"
+    volumes:
+      - employee_data:/var/lib/postgresql/data
+
+
+  role-service:
+    build: ./role-service
+    container_name: role-service
+    depends_on:
+      - role-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SONG_SERVICE_URL: http://song-service:8082
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/employee-roles"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  employee-service:
+    build: ./employee-service
+    container_name: employee-service
+    depends_on:
+      employee-db:
+        condition: service_started
+      role-service:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      ROLE_SERVICE_URL: http://role-service:8081
+    ports:
+      - "8082:8082"
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    depends_on:
+      - role-service
+      - employee-service
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway
+
+
+volumes:
+  role_data:
+  employee_data:

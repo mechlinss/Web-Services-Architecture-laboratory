@@ -20,7 +20,7 @@ public class EmployeeRoleClient {
     private final String employeeRoleServiceUrl;
 
     public EmployeeRoleClient(RestTemplate restTemplate,
-                       @Value("${role.service.url:http://localhost:8081}") String employeeRoleServiceUrl) {
+                       @Value("${ROLE_SERVICE_URL:http://localhost:8081}") String employeeRoleServiceUrl) {
         this.restTemplate = restTemplate;
         this.employeeRoleServiceUrl = employeeRoleServiceUrl;
     }
