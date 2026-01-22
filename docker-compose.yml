@@ -13,6 +13,11 @@ services:
       - "5433:5432"
     volumes:
       - role_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sa -d roledb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   employee-db:
     image: postgres:16
@@ -25,6 +30,11 @@ services:
       - "5434:5432"
     volumes:
       - employee_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sa -d employeedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   discovery-service:
     build: ./discovery-service
@@ -32,62 +42,56 @@ services:
     ports:
       - "8761:8761"
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8761/actuator/health", "||", "exit", "1"]
-      interval: 10s
+      test: ["CMD", "java", "-cp", "/app/app.jar", "org.springframework.boot.loader.launch.JarLauncher", "--health.check=true"]
+      interval: 15s
       timeout: 5s
       retries: 10
-      start_period: 20s
+      start_period: 40s
 
   config-service:
     build: ./config-service
     container_name: config-service
     depends_on:
       discovery-service:
-        condition: service_healthy
+        condition: service_started
     ports:
       - "8888:8888"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8888/actuator/health", "||", "exit", "1"]
-      interval: 10s
+      test: ["CMD", "java", "-cp", "/app/app.jar", "org.springframework.boot.loader.launch.JarLauncher", "--health.check=true"]
+      interval: 15s
       timeout: 5s
       retries: 10
-      start_period: 20s
+      start_period: 40s
 
   role-service:
     build: ./role-service
     container_name: role-service
     depends_on:
       role-db:
-        condition: service_started
+        condition: service_healthy
       config-service:
-        condition: service_healthy
+        condition: service_started
       discovery-service:
-        condition: service_healthy
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
     ports:
       - "8081:8081"
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/api/employee-roles", "||", "exit", "1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
 
   employee-service:
     build: ./employee-service
     depends_on:
       employee-db:
-        condition: service_started
+        condition: service_healthy
       role-service:
-        condition: service_healthy
+        condition: service_started
       config-service:
-        condition: service_healthy
+        condition: service_started
       discovery-service:
-        condition: service_healthy
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
@@ -100,12 +104,12 @@ services:
     build: ./gateway
     container_name: gateway
     depends_on:
-      - role-service
-      - employee-service
+      role-service:
+        condition: service_started
       discovery-service:
-        condition: service_healthy
+        condition: service_started
       config-service:
-        condition: service_healthy
+        condition: service_started
     environment:
       SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
     ports:
