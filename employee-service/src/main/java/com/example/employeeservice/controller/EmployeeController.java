@@ -8,6 +8,9 @@ import com.example.employeeservice.entity.SimplifiedRole;
 import com.example.employeeservice.dto.EmployeeCreateDto;
 import com.example.employeeservice.dto.EmployeeReadDto;
 import com.example.employeeservice.service.EmployeeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
@@ -19,8 +22,13 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/employees")
 public class EmployeeController {
 
+    private static final Logger log = LoggerFactory.getLogger(EmployeeController.class);
+
     private final EmployeeService employeeService;
     private final EmployeeRoleClient employeeRoleClient;
+
+    @Value("${server.port:8082}")
+    private String serverPort;
 
     public EmployeeController(EmployeeService employeeService, EmployeeRoleClient employeeRoleClient) {
         this.employeeService = employeeService;
@@ -29,12 +37,14 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeListDto>> listEmployees() {
+        log.info("Handling request on employee-service instance at port: {}", serverPort);
         List<EmployeeListDto> employees = employeeService.findAll().stream().map(this::toEmployeeListDto).collect(Collectors.toList());
         return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeReadDto> getEmployee(@PathVariable("id") UUID id) {
+        log.info("Handling request on employee-service instance at port: {}", serverPort);
         return employeeService.findById(id).map(this::toEmployeeReadDto).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

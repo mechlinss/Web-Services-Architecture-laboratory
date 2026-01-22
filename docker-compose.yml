@@ -26,37 +26,75 @@ services:
     volumes:
       - employee_data:/var/lib/postgresql/data
 
+  discovery-service:
+    build: ./discovery-service
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8761/actuator/health", "||", "exit", "1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    ports:
+      - "8888:8888"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8888/actuator/health", "||", "exit", "1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   role-service:
     build: ./role-service
     container_name: role-service
     depends_on:
-      - role-db
+      role-db:
+        condition: service_started
+      config-service:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SONG_SERVICE_URL: http://song-service:8082
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
     ports:
       - "8081:8081"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/api/employee-roles"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/api/employee-roles", "||", "exit", "1"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 15s
+      retries: 10
+      start_period: 30s
 
   employee-service:
     build: ./employee-service
-    container_name: employee-service
     depends_on:
       employee-db:
         condition: service_started
       role-service:
         condition: service_healthy
+      config-service:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      ROLE_SERVICE_URL: http://role-service:8081
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
     ports:
-      - "8082:8082"
+      - "8082-8083:8082"
+    deploy:
+      replicas: 2
 
   gateway:
     build: ./gateway
@@ -64,6 +102,12 @@ services:
     depends_on:
       - role-service
       - employee-service
+      discovery-service:
+        condition: service_healthy
+      config-service:
+        condition: service_healthy
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
     ports:
       - "8080:8080"
 

@@ -14,6 +14,8 @@
         <module>role-service</module>
         <module>employee-service</module>
         <module>gateway</module>
+        <module>discovery-service</module>
+        <module>config-service</module>
     </modules>
 
     <properties>
