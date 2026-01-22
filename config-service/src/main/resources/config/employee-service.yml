@@ -22,3 +22,9 @@ eureka:
 role:
   service:
     url: http://role-service:8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
