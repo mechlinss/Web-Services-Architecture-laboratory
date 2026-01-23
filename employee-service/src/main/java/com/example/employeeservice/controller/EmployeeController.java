@@ -30,6 +30,9 @@ public class EmployeeController {
     @Value("${server.port:8082}")
     private String serverPort;
 
+    @Value("${INSTANCE_ID:unknown}")
+    private String instanceId;
+
     public EmployeeController(EmployeeService employeeService, EmployeeRoleClient employeeRoleClient) {
         this.employeeService = employeeService;
         this.employeeRoleClient = employeeRoleClient;
@@ -38,6 +41,7 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<List<EmployeeListDto>> listEmployees() {
         log.info("Handling request on employee-service instance at port: {}", serverPort);
+        log.info("=== REQUEST HANDLED BY INSTANCE: {} ===", instanceId);
         List<EmployeeListDto> employees = employeeService.findAll().stream().map(this::toEmployeeListDto).collect(Collectors.toList());
         return ResponseEntity.ok(employees);
     }
@@ -45,11 +49,13 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeReadDto> getEmployee(@PathVariable("id") UUID id) {
         log.info("Handling request on employee-service instance at port: {}", serverPort);
+        log.info("=== REQUEST HANDLED BY INSTANCE: {} ===", instanceId);
         return employeeService.findById(id).map(this::toEmployeeReadDto).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeCreateDto dto) {
+        log.info("=== REQUEST HANDLED BY INSTANCE: {} ===", instanceId);
         EmployeeRoleDto employeeRole = employeeRoleClient.getEmployeeRoleById(dto.getEmployeeRoleId());
         if (employeeRole == null) {
             return ResponseEntity.badRequest()
@@ -105,6 +111,7 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") UUID id) {
+        log.info("=== REQUEST HANDLED BY INSTANCE: {} ===", instanceId);
         return employeeService.findById(id).map(e -> {
             employeeService.deleteById(id);
             return ResponseEntity.noContent().<Void>build();

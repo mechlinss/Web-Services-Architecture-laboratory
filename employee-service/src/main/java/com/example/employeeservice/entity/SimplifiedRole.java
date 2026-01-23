@@ -6,10 +6,10 @@ import java.util.UUID;
 @Embeddable
 public class SimplifiedRole {
 
-    @Column(name = "role_id")
+    @Column(name = "employee_role_id")
     private UUID id;
 
-    @Column(name = "role_name")
+    @Column(name = "employee_role_name")
     private String name;
 
     public SimplifiedRole() {}

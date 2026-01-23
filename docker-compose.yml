@@ -68,7 +68,7 @@ services:
     ports:
       - "8081:8081"
 
-  employee-service:
+  employee-service-1:
     build: ./employee-service
     depends_on:
       employee-db:
@@ -82,9 +82,28 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
-    deploy:
-      replicas: 2
+      INSTANCE_ID: instance-1
+    ports:
+      - "8082:8082"
 
+  employee-service-2:
+    build: ./employee-service
+    depends_on:
+      employee-db:
+        condition: service_healthy
+      role-service:
+        condition: service_started
+      config-service:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
+      INSTANCE_ID: instance-2
+    ports:
+      - "8083:8083"
+      
   gateway:
     build: ./gateway
     container_name: gateway
