@@ -7,6 +7,9 @@ import com.example.roleservice.dto.EmployeeRoleListDto;
 import com.example.roleservice.dto.EmployeeRoleReadDto;
 import com.example.roleservice.entity.EmployeeRole;
 import com.example.roleservice.service.EmployeeRoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/employee-roles")
 public class EmployeeRoleController {
 
+    private static final Logger log = LoggerFactory.getLogger(EmployeeRoleController.class);
+
     private final EmployeeRoleService employeeRoleService;
     private final EmployeeClient employeeClient;
+
+    @Value("${server.port:8081}")
+    private String serverPort;
 
     public EmployeeRoleController(EmployeeRoleService employeeRoleService, EmployeeClient employeeClient) {
         this.employeeRoleService = employeeRoleService;
@@ -29,6 +37,7 @@ public class EmployeeRoleController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeRoleListDto>> listEmployeeRoles() {
+        log.info("Handling request on role-service instance at port: {}", serverPort);
         List<EmployeeRoleListDto> list = employeeRoleService.findAll()
                 .stream()
                 .map(this::toEmployeeRoleListDto)
@@ -38,6 +47,7 @@ public class EmployeeRoleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeRoleReadDto> getEmployeeRole(@PathVariable("id") UUID id) {
+        log.info("Handling request on role-service instance at port: {}", serverPort);
         return employeeRoleService.findById(id)
                 .map(this::toEmployeeRoleReadDto)
                 .map(ResponseEntity::ok)
